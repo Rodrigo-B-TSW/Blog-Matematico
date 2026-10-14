@@ -35,7 +35,6 @@
             border-radius: 4px;
         }
 
-        /* Lista de entradas cargadas dinámicamente */
         #lista-entradas {
             list-style-type: none;
             padding: 0;
@@ -82,7 +81,6 @@
             color: #555;
         }
 
-        /* Clases auxiliares para elementos interactivos */
         ul.interactivo {
             background-color: #fafafa;
             padding: 15px 30px;
@@ -115,7 +113,6 @@
 
     <h2 class="subtitulo">Entradas del Blog</h2>
     
-    <!-- Aquí JavaScript inyectará las entradas desde posts.js -->
     <ul id="lista-entradas"></ul>
 
     <h2 class="subtitulo">Recursos y Conceptos Básicos</h2>
@@ -131,11 +128,9 @@
         <li onclick="resaltarElemento(this)">Estadística: Análisis y tratamiento de datos.</li>
     </ul>
 
-    <!-- Archivo de configuración que contiene el arreglo de entradas -->
     <script src="posts.js"></script>
 
     <script>
-        // Cargar dinámicamente las entradas definidas en posts.js
         const contenedorLista = document.getElementById('lista-entradas');
 
         if (typeof publicaciones !== 'undefined' && publicaciones.length > 0) {
@@ -152,7 +147,6 @@
             contenedorLista.innerHTML = '<li>No hay entradas publicadas aún.</li>';
         }
 
-        // Funciones de interacción rápida
         function cambiarColorTitulo() {
             var titulo = document.getElementById('titulo');
             titulo.classList.toggle('cambio-color');
