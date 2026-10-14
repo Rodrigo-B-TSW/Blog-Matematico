@@ -318,36 +318,20 @@ contenidoEntrada = `
     </div>
 </section>`;
 
-
-/* ============================================================
-   Interactividad
-   ============================================================ */
-
-// Abre o cierra una tarjeta (agrega / quita la clase "abierto")
 function pnToggle(id) {
     document.getElementById(id).classList.toggle('abierto');
 }
 
-// Abre o cierra todas las tarjetas
 function pnTodo(abrir) {
     document.querySelectorAll('.pn .pn-card').forEach(function (card) {
         card.classList.toggle('abierto', abrir);
     });
 }
 
-/* ------------------------------------------------------------
-   Mini álgebra: para aceptar letras necesitamos "polinomios".
-   Un polinomio se guarda como un objeto donde cada término tiene:
-     c = coeficiente (el número)   v = variables y sus exponentes
-   Ejemplo: 6x  ->  { 'x1': { c: 6, v: { x: 1 } } }
-   ------------------------------------------------------------ */
-
-// Clave única de un monomio: las letras ordenadas con su exponente (x^2 y -> "x2y1")
 function pnClave(v) {
     return Object.keys(v).sort().map(function (l) { return l + v[l]; }).join('');
 }
 
-// Elimina los términos cuyo coeficiente quedó en 0 (con tolerancia por los decimales)
 function pnLimpiar(p) {
     for (var k in p) {
         if (Math.abs(p[k].c) < 1e-9) delete p[k];
@@ -355,11 +339,11 @@ function pnLimpiar(p) {
     return p;
 }
 
-function pnNum(n) {                       // un número, por ejemplo 3
+function pnNum(n) {                     
     return n === 0 ? {} : { '': { c: n, v: {} } };
 }
 
-function pnVar(letra) {                   // una letra, por ejemplo x
+function pnVar(letra) {                   
     var v = {};
     v[letra] = 1;
     var p = {};
@@ -367,7 +351,7 @@ function pnVar(letra) {                   // una letra, por ejemplo x
     return p;
 }
 
-function pnSuma(p, q) {                   // suma términos de la misma clave
+function pnSuma(p, q) {                   
     var r = {};
     [p, q].forEach(function (poly) {
         for (var k in poly) {
@@ -378,13 +362,13 @@ function pnSuma(p, q) {                   // suma términos de la misma clave
     return pnLimpiar(r);
 }
 
-function pnMult(p, q) {                   // cada término de p por cada término de q
+function pnMult(p, q) {                  
     var r = {};
     for (var k1 in p) {
         for (var k2 in q) {
             var v = {};
             for (var l1 in p[k1].v) v[l1] = p[k1].v[l1];
-            for (var l2 in q[k2].v) v[l2] = (v[l2] || 0) + q[k2].v[l2];   // x * x = x^2
+            for (var l2 in q[k2].v) v[l2] = (v[l2] || 0) + q[k2].v[l2];   
             var k = pnClave(v);
             if (!r[k]) r[k] = { c: 0, v: v };
             r[k].c += p[k1].c * q[k2].c;
@@ -395,16 +379,14 @@ function pnMult(p, q) {                   // cada término de p por cada términ
 
 function pnResta(p, q) { return pnSuma(p, pnMult(pnNum(-1), q)); }
 
-function pnPot(p, n) {                    // multiplica p por sí mismo n veces
+function pnPot(p, n) {                    
     var r = pnNum(1);
     for (var i = 0; i < n; i++) r = pnMult(r, p);
     return r;
 }
 
-// Dos polinomios son iguales si su resta no deja ningún término
 function pnIguales(p, q) { return Object.keys(pnResta(p, q)).length === 0; }
 
-// Convierte un polinomio a texto con exponentes en <sup>, de mayor a menor grado
 function pnTexto(p) {
     var terminos = Object.keys(p).map(function (k) { return { k: k, t: p[k] }; });
     if (terminos.length === 0) return '0';
@@ -412,7 +394,7 @@ function pnTexto(p) {
     function grado(t) {
         return Object.keys(t.v).reduce(function (s, l) { return s + t.v[l]; }, 0);
     }
-    // Primero el de mayor grado; si empatan, el que tenga más exponente en la letra que va antes (x^2 antes que xy)
+
     terminos.sort(function (a, b) {
         var d = grado(b.t) - grado(a.t);
         if (d !== 0) return d;
@@ -438,20 +420,10 @@ function pnTexto(p) {
     return html;
 }
 
-// Evita que lo que escribe la persona se interprete como HTML
 function pnEsc(texto) {
     return texto.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/* ------------------------------------------------------------
-   Intérprete: convierte un texto como "2x+1" en un polinomio.
-   Gramática (de menor a mayor prioridad):
-     expresión = término ( (+|-) término )*
-     término   = factor ( [*] factor )*       <- "2x" es 2 * x (multiplicación implícita)
-     factor    = (-|+) factor | potencia
-     potencia  = átomo [ ^ entero ]
-     átomo     = número | letra | ( expresión )
-   ------------------------------------------------------------ */
 function pnParsear(texto) {
     var s = texto.replace(/\s+/g, '').replace(/−/g, '-').replace(/[×·]/g, '*')
                  .replace(/²/g, '^2').replace(/³/g, '^3').replace(/,/g, '.');
@@ -473,7 +445,7 @@ function pnParsear(texto) {
 
     function termino() {
         var p = factor();
-        // Mientras no llegue un + , - o ), lo que sigue se multiplica (con o sin *)
+
         while (i < s.length && s[i] !== '+' && s[i] !== '-' && s[i] !== ')') {
             if (s[i] === '*') i++;
             p = pnMult(p, factor());
@@ -522,12 +494,10 @@ function pnParsear(texto) {
     }
 
     var resultado = expresion();
-    if (i < s.length) fallo();           // sobró texto que no pudimos leer
+    if (i < s.length) fallo();         
     return resultado;
 }
 
-// Muestra el resultado de la comparación: lado izquierdo vs lado derecho
-// izq y der son polinomios; pasos es el texto con la fórmula ya sustituida
 function pnMostrar(idRes, pasos, izq, der) {
     var igual = pnIguales(izq, der);
     document.getElementById(idRes).innerHTML =
@@ -537,8 +507,6 @@ function pnMostrar(idRes, pasos, izq, der) {
         (igual ? ' <span class="pn-ok"> ¡Son iguales!</span>' : ' ');
 }
 
-// Lee los inputs, los convierte en polinomios y ejecuta el cálculo de cada tema.
-// Si algo sale mal (campo vacío, texto raro) muestra el mensaje de error.
 function pnCorrer(idRes, ids, calcular) {
     try {
         var polys = [], textos = [];
@@ -560,7 +528,7 @@ function pnCuadrado() {
     pnCorrer('pn-cuad-res', ['pn-cuad-a', 'pn-cuad-b'], function (p, t) {
         var A = p[0], B = p[1];
         return {
-            // izq: multiplicamos el binomio por sí mismo; der: aplicamos la fórmula
+    
             izq: pnPot(pnSuma(A, B), 2),
             der: pnSuma(pnSuma(pnPot(A, 2), pnMult(pnMult(pnNum(2), A), B)), pnPot(B, 2)),
             pasos: '(' + t[0] + ' + ' + t[1] + ')<sup>2</sup> = ' + t[0] + '<sup>2</sup> + 2' + t[0] + t[1] + ' + ' + t[1] + '<sup>2</sup>'
@@ -568,7 +536,6 @@ function pnCuadrado() {
     });
 }
 
-// (a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3
 function pnCubo() {
     pnCorrer('pn-cubo-res', ['pn-cubo-a', 'pn-cubo-b'], function (p, t) {
         var A = p[0], B = p[1];
@@ -585,7 +552,6 @@ function pnCubo() {
     });
 }
 
-// (x + a)(x + b) = x^2 + (a + b)x + ab
 function pnComun() {
     pnCorrer('pn-com-res', ['pn-com-x', 'pn-com-a', 'pn-com-b'], function (p, t) {
         var X = p[0], A = p[1], B = p[2];
@@ -598,7 +564,6 @@ function pnComun() {
     });
 }
 
-// (a + b)(a - b) = a^2 - b^2
 function pnConjugados() {
     pnCorrer('pn-conj-res', ['pn-conj-a', 'pn-conj-b'], function (p, t) {
         var A = p[0], B = p[1];
