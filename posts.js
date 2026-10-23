@@ -8,14 +8,21 @@ const publicaciones = [
   },
   {
     id: "02pn",
-    titulo: "Factorización",
-    archivo: "entradas/factorizacion.js",
+    titulo: "Factorización I",
+    archivo: "entradas/factorizacion_1.js",
     fecha: "2026-10-17",
-    resumen: "Factorización: Pasos para resolverlo" 
+    resumen: "En esta entrada se te enseñará cómo factorizar" 
+  },
+  {
+    id: "03pn",
+    titulo: "Factorización II: Trinomios",
+    archivo: "entradas/factorizacion_2.js",
+    fecha: "2026-10-22",
+    resumen: "Aquí se te enseñará como factorizar por trinomio, etc" 
   },
   {
     id: "prueba",
-    titulo: "Entrada como prueba",
+    titulo: "Entrada como prueba (Ignorar)",
     archivo: "entradas/Prueba.js",
     fecha: "2026-10-20",
     resumen: "Resumen de prueba"
