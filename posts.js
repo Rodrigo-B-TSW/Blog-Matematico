@@ -21,6 +21,13 @@ const publicaciones = [
     resumen: "Aquí se te enseñará como factorizar por trinomio, etc" 
   },
   {
+    id: "04pn",
+    titulo: "Ecuaciones de Primer Grado",
+    archivo: "entradas/primergrado.js",
+    fecha: "2026-10-29",
+    resumen: "Aquí te enseñaré a resolver ecuaciones de primer grado"
+  },
+  {
     id: "prueba",
     titulo: "Entrada como prueba (Ignorar)",
     archivo: "entradas/Prueba.js",
