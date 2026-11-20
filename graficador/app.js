@@ -356,7 +356,7 @@ function operarDos(op) {
   else if (op === 'multiplicarAB') aplicar('A · B', () => multiplicar(A(), B()));
   else if (op === 'multiplicarBA') aplicar('B · A', () => multiplicar(B(), A()));
 }
-
+ 
 // Cada hipervínculo dice qué operación hace (data-op) y con qué matriz (data-matriz).
 document.querySelectorAll('.operaciones a').forEach(enlace => {
   enlace.onclick = (evento) => {

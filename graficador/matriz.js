@@ -65,15 +65,13 @@ function pendiente(nombre, workshop) {
  */
 function sumar(A, B) {
   if (!mismoOrden(A, B)) {
-    throw new Error("Para sumar A y B tienen que ser del mismo orden.");
+    throw new Error('Para sumar, A y B deben tener el mismo orden.');
   }
   const [m, n] = orden(A);
   const R = crearMatriz(m, n);
-
-  // Sumar componente a componente
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
-        R[i][j] = A[i][j] + B[i][j]
+      R[i][j] = A[i][j] + B[i][j];
     }
   }
   return R;
@@ -85,15 +83,13 @@ function sumar(A, B) {
  */
 function restar(A, B) {
   if (!mismoOrden(A, B)) {
-    throw new Error("Para restar A y B tienen que ser del mismo orden.");
+    throw new Error('Para restar, A y B deben tener el mismo orden.');
   }
   const [m, n] = orden(A);
   const R = crearMatriz(m, n);
-
-  // Restar componente a componente
   for (let i = 0; i < m; i++) {
     for (let j = 0; j < n; j++) {
-        R[i][j] = A[i][j] - B[i][j];
+      R[i][j] = A[i][j] - B[i][j];
     }
   }
   return R;
@@ -104,8 +100,14 @@ function restar(A, B) {
  * En una imagen: k > 1 aclara, 0 < k < 1 oscurece.
  */
 function escalar(k, A) {
-  // TODO Workshop 1
-  pendiente('escalar', 'Workshop 1');
+  const [m, n] = orden(A);
+  const R = crearMatriz(m, n);
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      R[i][j] = k * A[i][j];
+    }
+  }
+  return R;
 }
 
 /**
@@ -115,24 +117,14 @@ function escalar(k, A) {
  * Ojo: el resultado NO tiene el mismo tamaño que A (salvo si es cuadrada).
  */
 function transpuesta(A) {
-  // TODO Workshop 1
-  pendiente('transpuesta', 'Workshop 1');
-}
-
-/**
- * Multiplicación matricial A · B: renglón por columna.
- *
- * Solo existe si las COLUMNAS de A son iguales a los RENGLONES de B:
- *     throw new Error('Para multiplicar, las columnas de A deben ser iguales a los renglones de B.');
- *
- * Si A es m × n y B es n × p, el resultado es m × p:
- *     R[i][j] = A[i][0]·B[0][j] + A[i][1]·B[1][j] + ... + A[i][n−1]·B[n−1][j]
- *
- * Pista: son TRES for (renglón i, columna j, y k para recorrer y sumar).
- */
-function multiplicar(A, B) {
-  // TODO Workshop 1
-  pendiente('multiplicar', 'Workshop 1');
+  const [m, n] = orden(A);
+  const R = crearMatriz(n, m);
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      R[j][i] = A[i][j];
+    }
+  }
+  return R;
 }
 
 
@@ -144,7 +136,15 @@ function multiplicar(A, B) {
 /** Determinante de una matriz 2 × 2:  ad − bc */
 function det2(T) {
   // TODO Workshop 2
-  pendiente('det2', 'Workshop 2');
+  //pendiente('det2', 'Workshop 2');
+  var determinante = 0;
+  const a = T[0][0];
+  const b = T[0][1];
+  const c = T[1][0];
+  const d = T[1][1];
+  //
+  determinante = a * d - b * c;
+  return determinante;
 }
 
 /**
@@ -164,14 +164,22 @@ function transformar(x, y, T) {
  *     throw new Error('El determinante solo existe para matrices cuadradas.');
  *
  * Pista: es recursiva.
- *   - Si A es 2 × 2, regresa det2(A).
- *   - Si no, recorre el renglón 0: para cada columna j, arma el MENOR
- *     (A sin el renglón 0 y sin la columna j) y suma
- *         (−1)^j · A[0][j] · determinante(menor)
+ *  - Si A es 2 × 2, regresa det2(A).
+ *  - Si no, recorre el renglón 0: para cada columna j, arma el MENOR
+ *    (A sin el renglón 0 y sin la columna j) y suma
+ *        (-1)^j · A[0][j] · determinante(menor)
  */
 function determinante(A) {
   // TODO Workshop 2
-  pendiente('determinante', 'Workshop 2');
+  //pendiente('determinante', 'Workshop 2');
+  const [filas, columnas] = orden(A);
+  var determinante = 0;
+  if (filas == 2) {
+    determinante = det2(A);
+    return determinante;
+  } else {
+    pendiente('determinante', 'Workshop 2');
+  }
 }
 
 
@@ -202,18 +210,4 @@ function gaussJordan(aumentada) {
 function inversa2x2(T) {
   // TODO Workshop 4
   pendiente('inversa2x2', 'Workshop 4');
-}
-
-/**
- * Inversa de una matriz cuadrada de cualquier tamaño, con Gauss-Jordan.
- *
- *     [ A | I ]   →  operaciones de renglón  →   [ I | A⁻¹ ]
- *
- * Si A no es cuadrada, lanza un error.
- * Si en alguna columna no hay pivote distinto de 0, A no tiene inversa
- * (su determinante es 0): regresa null.
- */
-function inversa(A) {
-  // TODO Workshop 4
-  pendiente('inversa', 'Workshop 4');
 }
